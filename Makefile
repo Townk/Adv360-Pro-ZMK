@@ -22,3 +22,19 @@ all:
 clean:
 	rm -f firmware/*.uf2
 	$(DOCKER) image rm zmk docker.io/zmkfirmware/zmk-build-arm:stable
+
+write-latest-left:
+	[ -d /Volumes/ADV360PRO ] && rsync "$(ls -Art firmware/*left.uf2 | tail -n 1)" /Volumes/ADV360PRO/ || echo "Kinesis Advantage360 is not in bootload mode!"
+
+write-latest-right:
+	[ -d /Volumes/ADV360PRO ] && rsync "$(ls -Art firmware/*right.uf2 | tail -n 1)" /Volumes/ADV360PRO/ || echo "Kinesis Advantage360 is not in bootload mode!"
+
+write-left:
+	[ -d /Volumes/ADV360PRO ] && rsync "$(fd '.*left.uf2' firmware | fzf)" /Volumes/ADV360PRO/ || echo "Kinesis Advantage360 is not in bootload mode!"
+
+write-right:
+	[ -d /Volumes/ADV360PRO ] && rsync "$(fd '.*right.uf2' firmware | fzf)" /Volumes/ADV360PRO/ || echo "Kinesis Advantage360 is not in bootload mode!"
+
+tasks:
+	grep -oP '^([^ .:]+)(?=:)' Makefile | sort
+
